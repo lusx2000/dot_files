@@ -139,9 +139,30 @@ then
   	echo "Installing Android Studio"
   	echo ""
 	cd ~/Downloads
-  	wget https://dl.google.com/dl/android/studio/ide-zips/3.0.1.0/android-studio-ide-171.4443003-linux.zip
-    sudo unzip android-studio-ide-171.4443003-linux.zip -d /usr/local
-	sudo rm -f ~/Downloads/android-studio-ide-171.4443003-linux.zip
+    sudo apt-get install python3-requests python3-bs4
+	cat > ~/Downloads/get_android_studio.py << _ANDROID_EOF
+import requests
+from bs4 import BeautifulSoup
+import os
+url = 'http://www.android-studio.org/'
+r = requests.get(url, timeout=30)
+r.encoding = r.apparent_encoding
+soup = BeautifulSoup(r.text, 'html.parser')
+a = []
+for child in soup.tbody.children:
+    a.append(child)
+tr = a[-2]
+a = []
+for child in tr:
+    a.append(child)
+link = a[3].a.get('href')
+os.system('wget {} -O android-studio.zip'.format(link))
+_ANDROID_EOF
+    python3 ~/Downloads/get_android_studio.py
+    rm ~/Downloads/get_android_studio.py
+    sudo unzip ~/Downloads/android-studio.zip -d /usr/local
+    rm ~/Downloads/android-studio.zip
+    /usr/local/android-studio/bin/studio.sh
   fi
   
   
@@ -180,7 +201,7 @@ then
     clear
   	echo "Updating"
 	cd ~
-	cat>~/.vimrc<<EOF
+	cat>~/.vimrc<< _VIM_EOF
 "基本配置
 syntax on 
 syntax enable
@@ -227,7 +248,7 @@ let l = 0
 let l = l + 1 | call setline(l,'#include <stdio.h>')
 let l = l + 1 | call setline(l,'#include <stdlib.h>')
 let l = l + 1 | call setline(l,'')
-let l = l + 1 | call setline(l,'int main()')
+let l = l + 1 | call setline(l,'int main(int argc, char *argv[])')
 let l = l + 1 | call setline(l,'{')
 let l = l + 1 | call setline(l,'    return 0;')
 let l = l + 1 | call setline(l,'}')
@@ -268,7 +289,7 @@ func! Debug()
            exec "!gdb ./%<"
 	endif
 endfunc
-EOF
+_VIM_EOF
 
   fi
 
