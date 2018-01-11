@@ -1,1 +1,3 @@
-Use python crawler to get the newest software version
+clion pycharm download site cannot be accessed
+use command line rather than gtk GUI
+simple version control
