@@ -55,7 +55,7 @@ then
     clear
   	echo "Installing Build Essential"
   	echo ""
-    sudo apt-get -y install build-essential cmake git wget vim
+    sudo apt-get -y install build-essential cgdb cmake git wget vim
   fi
 
   #Install zsh
@@ -283,10 +283,10 @@ func! Debug()
 	exec "w"
 	if &filetype == 'c'
            exec "!gcc % -g -Wall -o   %<"
-           exec "!gdb ./%<"
+           exec "!cgdb ./%<"
         elseif &filetype == 'cpp'
            exec "!g++ % -g -std=c++11 -Wall -o  %<"
-           exec "!gdb ./%<"
+           exec "!cgdb ./%<"
 	endif
 endfunc
 _VIM_EOF
