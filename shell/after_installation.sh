@@ -1,146 +1,72 @@
 #!/bin/bash
 
-# Please ensure open this shell by using bash!!
+function changeMirror {
+  sudo sed -i 's/cn.archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+  echo "changed to USTC mirrors"
+  return
+}
 
-# Clear Terminal
-clear
+function update {
+  echo "Updating"
+  sudo apt-get -y update
+  sudo apt-get -y upgrade
+  return 
+}
 
-# Create GUI
-GUI=$(zenity --list --checklist \
-  --height="600" \
-  --width="1000" \
-  --title="Debian" \
-  --text="Choose items to get installed" \
-  --column="Choice" --column="Operation"	--column="Description" \
-  TRUE "Change Mirror" "Change to USTC mirror for better internet connection speed" \
-  TRUE "Update" "Update and Upgrade" \
-  FALSE "Install Build Essential" "Install Git CMake etc" \
-  FALSE "Install zsh" "Replace bash by zsh and on-my-zsh" \
-  FALSE "Install Lantern" "Install Lantern for Google Services" \
-  FALSE "Install Chrome" "Install Google Chrome for better Web surf experience" \
-  FALSE "Install NetEase Music" "Install Netease Music" \
-  FALSE "Install CLion" "Install C/C++ IDE " \
-  FALSE "Install Pycharm" "Install Python IDE" \
-  FALSE "Install Android Studio" "Install Android Development IDE" \
-  FALSE "Install OpenCV 3" "Auto Complie OpenCV3.2 and all additional package" \
-  FALSE "Create .vimrc" "Update .vimrc for better code experience" \
-  --separator="|");
+function installBuildEssential {
+  echo "Installing Build Essential"
+  sudo apt-get -y install build-essential cgdb cmake git wget vim
+  return 
+}
 
-if [[ $GUI ]]
-then
+function installZshell {
+  echo "Installing ZShell"
+  sudo apt-get -y install zsh
+  echo "Installing Oh-my-zsh"
+  sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+  return
+}
 
-  # Change Mirror
-  if [[ $GUI == *"Change Mirror"* ]]
-  then
-    clear
-  	echo "Changing"
-  	echo ""
-    sudo sed -i 's/cn.archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-    echo "Changed"
-  fi
+function installLantern {
+  cd ~/Downloads
+  echo "Downloading lantern"
+  wget https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb
+  echo "Installing lantern"
+  sudo dpkg -i lantern-installer-64-bit.deb
+  sudo apt-get -y install -f
+  rm -f lantern-installer-64-bit.deb
+  return 
+}
 
-  # Update 
-  if [[ $GUI == *"Update"* ]]
-  then
-    clear
-  	echo "Updating"
-  	echo ""
-  	sudo apt-get -y update
-  	sudo apt-get -y upgrade
-  fi
+function installGoogleChrome {
+  cd ~/Downloads
+  echo "Downloading Chrome"
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  echo "Installing Chrome"
+  sudo dpkg -i google-chrome-stable_current_amd64.deb
+  sudo apt-get -y install -f
+  rm -f google-chrome-stable_current_amd64.deb
+  return
+}
 
-  #Install Build Essential
-  if [[ $GUI == *"Install Build Essential"* ]]
-  then
-    clear
-  	echo "Installing Build Essential"
-  	echo ""
-    sudo apt-get -y install build-essential cmake git wget vim
-  fi
+function installNetEaseMusic {
+  cd ~/Downloads
+  echo "Downloading NetEase Music"
+  wget http://s1.music.126.net/download/pc/netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
+  echo "Installing NetEase Music"
+  sudo dpkg -i netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
+  sudo apt-get -y install -f
+  rm -f netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
+  return
+}
 
-  #Install zsh
-  if [[ $GUI == *"Install zsh"* ]]
-  then
-    clear
-  	echo "Installing Zshell"
-  	echo ""
-    sudo apt-get -y install zsh
-    sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-  fi
-
-  # Install Lantern
-  if [[ $GUI == *"Install Lantern"* ]]
-  then
-    clear
-  	echo "Installing Lantern"
-  	echo ""
+function installAndroidStudio {
+ 	echo "Installing Android Studio"
 	cd ~/Downloads
-  	wget https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb
-    sudo dpkg -i lantern-installer-64-bit.deb
-    sudo apt-get -y install -f
-    rm -f lantern-installer-64-bit.deb
-  fi
-  
-  # Install Google Chrome
-  if [[ $GUI == *"Install Chrome"* ]]
-  then
-    clear
-  	echo "Installing Chrome"
-  	echo ""
-  	cd ~/Downloads
-	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt-get -y install -f
-    rm -f google-chrome-stable_current_amd64.deb
-  fi
-
-  # Install NetEase Music
-  if [[ $GUI == *"Install NetEase Music"* ]]
-  then
-    clear
-  	echo "Installing NetEase Music"
-  	echo ""
-	cd ~/Downloads
-  	wget http://s1.music.126.net/download/pc/netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
-    sudo dpkg -i netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
-    sudo apt-get -y install -f
-    rm -f netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
-  fi
-
-  # Install CLion
-  if [[ $GUI == *"Install CLion"* ]]
-  then
-    clear
-  	echo "Installing CLion"
-  	echo ""
-	cd ~/Downloads
-  	wget https://download.jetbrains.com/cpp/CLion-2017.3.1.tar.gz
-    sudo tar zvxf CLion-2017.3.1.tar.gz -C /usr/local
-    sudo rm -f ~/Downloads/CLion-2017.3.1.tar.gz
-  fi
-
-    # Install Pycharm
-  if [[ $GUI == *"Install Pycharm"* ]]
-  then
-    clear
-  	echo "Installing Pycharm"
-  	echo ""
-	cd ~/Downloads
-  	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.2.tar.gz
-    sudo tar zvxf pycharm-professional-2017.3.2.tar.gz -C /usr/local
-    sudo rm -f ~/Downloads/pycharm-professional-2017.3.2.tar.gz
-    sudo 
-  fi
-  
-    # Install Android Studio
-  if [[ $GUI == *"Install Android Studio"* ]]
-  then
-    clear
-  	echo "Installing Android Studio"
-  	echo ""
-	cd ~/Downloads
-    sudo apt-get install python3-requests python3-bs4
-	cat > ~/Downloads/get_android_studio.py << _ANDROID_EOF
+  sudo apt-get install python3-requests python3-bs4
+	
+# Using a python webcrawler to get latest Android Studio 
+  cat > ~/Downloads/get_android_studio.py << _ANDROID_EOF
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -158,49 +84,43 @@ for child in tr:
 link = a[3].a.get('href')
 os.system('wget {} -O android-studio.zip'.format(link))
 _ANDROID_EOF
-    python3 ~/Downloads/get_android_studio.py
-    rm ~/Downloads/get_android_studio.py
-    sudo unzip ~/Downloads/android-studio.zip -d /usr/local
-    rm ~/Downloads/android-studio.zip
-    /usr/local/android-studio/bin/studio.sh
-  fi
-  
-  
-  #Install OpenCV 3
-  if [[ $GUI == *"Install OpenCV 3"* ]]
-  then
-    clear
-  	echo "Downloading OpenCV 3"
-  	echo ""
-    mkdir ~/Documents/OpenCV
-    cd ~/Documents/OpenCV
-    sudo apt-get -y install aria2
-    aria2c https://github.com/opencv/opencv/archive/3.2.0.tar.gz -o opencv3.2.0.tar.gz
-    aria2c https://github.com/opencv/opencv_contrib/archive/3.2.0.tar.gz -o opencv3.2.0-contrib.tar.gz
-    tar zvxf ~/Documents/OpenCV/opencv3.2.0.tar.gz
-    tar zvxf ~/Documents/OpenCV/opencv3.2.0-contrib.tar.gz
-    echo "Downloaded successfully"
-    echo ""
-    echo "Installing Dependencies Library"
-    sudo apt-get -y install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
-    sudo apt-get -y install python3-dev python3-numpy libtbb2 libtbb-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
-    cd ~/Documents/OpenCV/opencv-3.2.0
-    mkdir build
-    cd build
-    cmake -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES=~/Downloads/OpenCV/opencv_contrib-3.2.0/modules -D CMAKE_INSTALL_PREFIX=/usr/local ..
-    make -j4
-    sudo make install
-    echo "Install finished"
-
-  fi
+  python3 ~/Downloads/get_android_studio.py
+  rm ~/Downloads/get_android_studio.py
+  sudo unzip ~/Downloads/android-studio.zip -d /usr/local
+  rm ~/Downloads/android-studio.zip
+  /usr/local/android-studio/bin/studio.sh 
+  return 
+}
 
 
-  #Update .vimrc
-  if [[ $GUI == *"Create .vimrc"* ]]
-  then
-    clear
-  	echo "Updating"
-	cd ~
+function installOpenCV {
+
+# Using OpenCV3.2 with extra modules 
+  echo "Downloading OpenCV 3"
+  mkdir ~/Documents/OpenCV
+  cd ~/Documents/OpenCV
+  wget https://github.com/opencv/opencv/archive/3.2.0.tar.gz -O opencv3.2.0.tar.gz
+  wget https://github.com/opencv/opencv_contrib/archive/3.2.0.tar.gz -O opencv3.2.0-contrib.tar.gz
+  tar zvxf ~/Documents/OpenCV/opencv3.2.0.tar.gz
+  tar zvxf ~/Documents/OpenCV/opencv3.2.0-contrib.tar.gz
+  echo "Downloaded successfully"
+  echo ""
+  echo "Installing Dependencies Library"
+  sudo apt-get -y install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+  sudo apt-get -y install python3-dev python3-numpy libtbb2 libtbb-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+  cd ~/Documents/OpenCV/opencv-3.2.0
+  mkdir build
+  cd build
+  cmake -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES=~/Documents/OpenCV/opencv_contrib-3.2.0/modules -D CMAKE_INSTALL_PREFIX=/usr/local ..
+  make -j4
+  sudo make install
+  echo "Install finished"
+  return
+}
+
+function createVimConf {
+  cd ~
+  echo "creating .vimrc"
 	cat>~/.vimrc<< _VIM_EOF
 "基本配置
 syntax on 
@@ -283,19 +203,57 @@ func! Debug()
 	exec "w"
 	if &filetype == 'c'
            exec "!gcc % -g -Wall -o   %<"
-           exec "!gdb ./%<"
+           exec "!cgdb ./%<"
         elseif &filetype == 'cpp'
            exec "!g++ % -g -std=c++11 -Wall -o  %<"
-           exec "!gdb ./%<"
+           exec "!cgdb ./%<"
 	endif
 endfunc
 _VIM_EOF
 
-  fi
+  return 
+}
 
-  # Finish Notify
-  clear
-  notify-send -i utilities-terminal UbuntuConfigurator "Configured successfully!"
+clear
+echo "
+Simple Configurator for Ubuntu :
+A.  ChangeMirror
+B.  Update & Upgrade
+C.  Install Build Essential packages 
+D.  Install ZShell
+E.  Install Lantern
+F.  Install Google Chrome
+G.  Install NetEase Music
+H.  Install Android-Studio
+I.  Install OpenCV 3.2
+J.  Create .vimrc
 
+0. Quit
+"
+
+read -p "Enter one or more (defalut = all)> " 
+
+if [ "$REPLY" == "" ]; then
+  REPLY="all"
 fi
 
+if [ "$REPLY" == "all" ]; then
+  REPLY="a b c d e f g h i j"
+fi
+
+echo "Your option is : $REPLY"
+
+# something wrong with case select
+case $REPLY in
+  "0") exit ;;&
+  "a"|"A") changeMirror ;;&
+  "b"|"B") update ;;&
+  "c"|"C") installBuildEssential ;;&
+  "d"|"D") installZshell ;;&
+  "e"|"E") installLantern ;;&
+  "f"|"F") installGoogleChrome ;;&
+  "g"|"G") installNetEaseMusic ;;&
+  "h"|"H") installAndroidStudio ;;&
+  "i"|"I") installOpenCV ;;&
+  "j"|"J") createVimConf ;;&
+esac 

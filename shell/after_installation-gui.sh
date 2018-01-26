@@ -187,7 +187,7 @@ _ANDROID_EOF
     cd ~/Documents/OpenCV/opencv-3.2.0
     mkdir build
     cd build
-    cmake -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES=~/Downloads/OpenCV/opencv_contrib-3.2.0/modules -D CMAKE_INSTALL_PREFIX=/usr/local ..
+    cmake -D CMAKE_BUILD_TYPE=Release -D OPENCV_EXTRA_MODULES=~/Documents/OpenCV/opencv_contrib-3.2.0/modules -D CMAKE_INSTALL_PREFIX=/usr/local ..
     make -j4
     sudo make install
     echo "Install finished"

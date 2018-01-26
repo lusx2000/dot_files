@@ -57,4 +57,21 @@ C_SRC_EOF
 fi
 
 mkdir cmake_build_debug
+cd cmake_build_debug
 
+cat > debug_run << DEBUG_SHELL_EOF
+#!/bin/bash
+cmake -D CMAKE_BUILD_TYPE=DEBUG ..
+make
+./$project_name
+DEBUG_SHELL_EOF
+
+
+cat > release_run << RUN_SHELL_EOF
+#!/bin/bash
+cmake -D CMAKE_BUILD_TYPE=RELEASE ..
+make
+./$project_name
+RUN_SHELL_EOF
+
+chmod +x debug_run release_run
