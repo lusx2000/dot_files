@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+vimrcdir=`pwd`
+
 function changeMirror {
   sudo sed -i 's/cn.archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
   echo "changed to USTC mirrors"
@@ -119,98 +122,8 @@ function installOpenCV {
 }
 
 function createVimConf {
-  cd ~
   echo "creating .vimrc"
-	cat>~/.vimrc<< _VIM_EOF
-"基本配置
-syntax on 
-syntax enable
-set mouse=a
-set mousehide
-set encoding=utf-8
-set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
-scriptencoding utf-8
-"花括号匹配相关
-inoremap { {}<ESC>i
-inoremap {<CR> {<CR>}<ESC>O
-set cursorline "高亮当前行
-set number "行数
-set autoindent "自动缩进
-set smartindent "智能缩进
-set cindent "C系列缩进
-set softtabstop=4 "缩进长度
-set shiftwidth=4 "缩进长度
-set tabstop=4 "tab键长度
-set expandtab "tab设为空格
-set softtabstop=4 "缩进长度
-set showmatch "自动匹配
-set ruler "在右下角显示当前行信息
-set incsearch "搜索加强
-set hlsearch "搜索高亮
-set guioptions-=T "一出工具栏
-set showcmd "显示出输入的命令
-set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
-set history=1000 "历史记录条数从20到1000
-set guioptions-=m "隐藏菜单栏
-set ignorecase "搜索忽略大小写
-filetype plugin indent on "自动检测文件类型并启动相关缩进插件
-filetype plugin on "不同文件类型加载相应插件
-filetype on "检查文件类型
-set cmdheight=2 "命令行高度加1
-" vim 自身命令行模式智能补全
-set wildmenu
-
-"按<F2>自动生成代码设置
-if !exists("*SetTitlea")
-map <F2> :call SetTitlea()<CR>
-func SetTitlea()
-let l = 0
-let l = l + 1 | call setline(l,'#include <stdio.h>')
-let l = l + 1 | call setline(l,'#include <stdlib.h>')
-let l = l + 1 | call setline(l,'')
-let l = l + 1 | call setline(l,'int main(int argc, char *argv[])')
-let l = l + 1 | call setline(l,'{')
-let l = l + 1 | call setline(l,'    return 0;')
-let l = l + 1 | call setline(l,'}')
-endfunc
-endif
-
-
-
-"按F5一键编译并运行
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-        exec "w"
-        if &filetype == 'c'
-           exec "!gcc % -Wall -o   %<"
-           exec "!time ./%<"
-        elseif &filetype == 'cpp'
-           exec "!g++ % -std=c++11 -Wall -o    %<"
-           exec "!time ./%<"
-        elseif &filetype == 'java'
-           exec "!javac %"
-           exec "!time java %<"
-        elseif &filetype == 'sh'
-           :!time bash %
-        elseif &filetype == 'python'
-        exec "!time python3 %"
-        endif
-endfunc
-
-"按F6一键Debug
-map <F6> :call Debug()<CR>
-func! Debug()
-	exec "w"
-	if &filetype == 'c'
-           exec "!gcc % -g -Wall -o   %<"
-           exec "!cgdb ./%<"
-        elseif &filetype == 'cpp'
-           exec "!g++ % -g -std=c++11 -Wall -o  %<"
-           exec "!cgdb ./%<"
-	endif
-endfunc
-_VIM_EOF
-
+  cp $vimrcdir/vimrc ~/.vimrc
   return 
 }
 
