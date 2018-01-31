@@ -71,10 +71,10 @@ map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
         exec "w"
         if &filetype == 'c'
-           exec "!gcc % -Wall -o   %<"
+           exec "!gcc % -Wall -lm -lncurses -o %<"
            exec "!time ./%<"
         elseif &filetype == 'cpp'
-           exec "!g++ % -std=c++11 -Wall -o    %<"
+           exec "!g++ % -std=c++11 -Wall -lm -lncurses `pkg-config --cflags --libs opencv` -o  %<"
            exec "!time ./%<"
         elseif &filetype == 'java'
            exec "!javac %"
@@ -91,10 +91,10 @@ map <F6> :call Debug()<CR>
 func! Debug()
 	exec "w"
 	if &filetype == 'c'
-           exec "!gcc % -g -Wall -o   %<"
+           exec "!gcc % -g -Wall -lm -lncurses -o   %<"
            exec "!cgdb ./%<"
         elseif &filetype == 'cpp'
-           exec "!g++ % -g -std=c++11 -Wall -o  %<"
+           exec "!g++ % -g -std=c++11 -Wall -lm -lncurses `pkg-config --cflags --libs opencv` -o  %<"
            exec "!cgdb ./%<"
 	endif
 endfunc
