@@ -6,13 +6,14 @@
 clear
 
 # Get Present Working Directory
-vimrcdir=`pwd`
+VIMRC_DIR=`pwd`
+IDE_INSTALL_DIR="~/.jetbrains"
 
 # Create GUI
 GUI=$(zenity --list --checklist \
   --height="600" \
   --width="1000" \
-  --title="Debian" \
+  --title="Ubuntu Configure Tool" \
   --text="Choose items to get installed" \
   --column="Choice" --column="Operation"	--column="Description" \
   TRUE "Change Mirror" "Change to USTC mirror for better internet connection speed" \
@@ -116,10 +117,11 @@ then
     clear
   	echo "Installing CLion"
   	echo ""
-	cd ~/Downloads
-  	wget https://download.jetbrains.com/cpp/CLion-2017.3.1.tar.gz
-    sudo tar zvxf CLion-2017.3.1.tar.gz -C /usr/local
-    sudo rm -f ~/Downloads/CLion-2017.3.1.tar.gz
+    mkdir ~/.jetbrains
+	  cd ~/Downloads
+  	wget https://download.jetbrains.com/cpp/CLion-2017.3.4.tar.gz
+    sudo tar zvxf CLion-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
+    sudo rm -f ~/Downloads/CLion-2017.3.4.tar.gz
   fi
 
     # Install Pycharm
@@ -129,9 +131,9 @@ then
   	echo "Installing Pycharm"
   	echo ""
 	cd ~/Downloads
-  	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.2.tar.gz
-    sudo tar zvxf pycharm-professional-2017.3.2.tar.gz -C /usr/local
-    sudo rm -f ~/Downloads/pycharm-professional-2017.3.2.tar.gz
+  	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.4.tar.gz
+    sudo tar zvxf pycharm-professional-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
+    sudo rm -f ~/Downloads/pycharm-professional-2017.3.4.tar.gz
     sudo 
   fi
   
@@ -163,9 +165,9 @@ os.system('wget {} -O android-studio.zip'.format(link))
 _ANDROID_EOF
     python3 ~/Downloads/get_android_studio.py
     rm ~/Downloads/get_android_studio.py
-    sudo unzip ~/Downloads/android-studio.zip -d /usr/local
+    sudo unzip ~/Downloads/android-studio.zip -d ~/.jetbrains/
     rm ~/Downloads/android-studio.zip
-    /usr/local/android-studio/bin/studio.sh
+    ~/.jetbrains/android-studio/bin/studio.sh
   fi
   
   
@@ -203,8 +205,14 @@ _ANDROID_EOF
   then
     clear
   	echo "Updating"
+    sudo apt-get update
+    sudo apt-get install git
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     cp $vimrcdir/vimrc ~/.vimrc
-    
+    vim +BundleInstall +qall
+    cd ~/.vim/bundle/YouCompleteMe
+    git submodule update --init --recursive
+    ./install.py --clang-completer
   fi
 
   # Finish Notify
