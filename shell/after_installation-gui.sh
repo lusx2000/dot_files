@@ -7,7 +7,9 @@ clear
 
 # Get Present Working Directory
 VIMRC_DIR=`pwd`
-IDE_INSTALL_DIR="/home/lusx/.jetbrains/"
+cd
+HOME_DIR=`pwd`
+IDE_INSTALL_DIR=$HOME_DIR"/.jetbrains/"
 
 # Create GUI
 GUI=$(zenity --list --checklist \
@@ -78,7 +80,7 @@ then
     clear
   	echo "Installing Lantern"
   	echo ""
-	cd ~/Downloads
+	  cd ~/Downloads
   	wget https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb
     sudo dpkg -i lantern-installer-64-bit.deb
     sudo apt-get -y install -f
@@ -93,7 +95,7 @@ then
   	echo ""
   	cd ~/Downloads
     sudo apt-get -y install flashplugin-installer
-	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt-get -y install -f
     rm -f google-chrome-stable_current_amd64.deb
@@ -132,8 +134,8 @@ then
   	echo ""
 	  mkdir ~/.jetbrains
     cd ~/Downloads
-  	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.4.tar.gz
-    tar zvxf ~/Downloads/pycharm-professional-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
+  	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.3.tar.gz
+    tar zvxf ~/Downloads/pycharm-professional-2017.3.3.tar.gz -C $IDE_INSTALL_DIR
   fi
   
     # Install Android Studio
@@ -212,4 +214,3 @@ _ANDROID_EOF
   notify-send -i utilities-terminal UbuntuConfigurator "Configured successfully!"
 
 fi
-
