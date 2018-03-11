@@ -7,7 +7,7 @@ clear
 
 # Get Present Working Directory
 VIMRC_DIR=`pwd`
-IDE_INSTALL_DIR="~/.jetbrains"
+IDE_INSTALL_DIR="/home/lusx/.jetbrains/"
 
 # Create GUI
 GUI=$(zenity --list --checklist \
@@ -104,7 +104,7 @@ then
     clear
   	echo "Installing NetEase Music"
   	echo ""
-	cd ~/Downloads
+	  cd ~/Downloads
   	wget http://s1.music.126.net/download/pc/netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
     sudo dpkg -i netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
     sudo apt-get -y install -f
@@ -120,8 +120,7 @@ then
     mkdir ~/.jetbrains
 	  cd ~/Downloads
   	wget https://download.jetbrains.com/cpp/CLion-2017.3.4.tar.gz
-    tar zvxf CLion-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
-    rm -f ~/Downloads/CLion-2017.3.4.tar.gz
+    tar zvxf ~/Downloads/CLion-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
   fi
 
     # Install Pycharm
@@ -130,10 +129,10 @@ then
     clear
   	echo "Installing Pycharm"
   	echo ""
-	cd ~/Downloads
+	  mkdir ~/.jetbrains
+    cd ~/Downloads
   	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.4.tar.gz
-    tar zvxf pycharm-professional-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
-    rm -f ~/Downloads/pycharm-professional-2017.3.4.tar.gz
+    tar zvxf ~/Downloads/pycharm-professional-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
   fi
   
     # Install Android Studio
@@ -165,8 +164,6 @@ _ANDROID_EOF
     python3 ~/Downloads/get_android_studio.py
     rm ~/Downloads/get_android_studio.py
     unzip ~/Downloads/android-studio.zip -d $IDE_INSTALL_DIR
-    rm ~/Downloads/android-studio.zip
-    $IDE_INSTALL_DIR/android-studio/bin/studio.sh
   fi
   
   
@@ -206,12 +203,7 @@ _ANDROID_EOF
   	echo "Updating"
     sudo apt-get update
     sudo apt-get install git
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-    cp $vimrcdir/vimrc ~/.vimrc
-    vim +BundleInstall +qall
-    cd ~/.vim/bundle/YouCompleteMe
-    git submodule update --init --recursive
-    ./install.py --clang-completer
+    cp $VIMRC_DIR/vimrc ~/.vimrc
   fi
 
   # Finish Notify
