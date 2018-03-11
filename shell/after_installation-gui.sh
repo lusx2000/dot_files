@@ -120,8 +120,8 @@ then
     mkdir ~/.jetbrains
 	  cd ~/Downloads
   	wget https://download.jetbrains.com/cpp/CLion-2017.3.4.tar.gz
-    sudo tar zvxf CLion-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
-    sudo rm -f ~/Downloads/CLion-2017.3.4.tar.gz
+    tar zvxf CLion-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
+    rm -f ~/Downloads/CLion-2017.3.4.tar.gz
   fi
 
     # Install Pycharm
@@ -132,9 +132,8 @@ then
   	echo ""
 	cd ~/Downloads
   	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.4.tar.gz
-    sudo tar zvxf pycharm-professional-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
-    sudo rm -f ~/Downloads/pycharm-professional-2017.3.4.tar.gz
-    sudo 
+    tar zvxf pycharm-professional-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
+    rm -f ~/Downloads/pycharm-professional-2017.3.4.tar.gz
   fi
   
     # Install Android Studio
@@ -143,9 +142,9 @@ then
     clear
   	echo "Installing Android Studio"
   	echo ""
-	cd ~/Downloads
+	  cd ~/Downloads
     sudo apt-get install python3-requests python3-bs4
-	cat > ~/Downloads/get_android_studio.py << _ANDROID_EOF
+	  cat > ~/Downloads/get_android_studio.py << _ANDROID_EOF
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -165,9 +164,9 @@ os.system('wget {} -O android-studio.zip'.format(link))
 _ANDROID_EOF
     python3 ~/Downloads/get_android_studio.py
     rm ~/Downloads/get_android_studio.py
-    sudo unzip ~/Downloads/android-studio.zip -d ~/.jetbrains/
+    unzip ~/Downloads/android-studio.zip -d $IDE_INSTALL_DIR
     rm ~/Downloads/android-studio.zip
-    ~/.jetbrains/android-studio/bin/studio.sh
+    $IDE_INSTALL_DIR/android-studio/bin/studio.sh
   fi
   
   
