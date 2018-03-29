@@ -25,7 +25,7 @@ GUI=$(zenity --list --checklist \
   TRUE "Install zsh" "Replace bash by zsh and on-my-zsh" \
   TRUE "Install Lantern" "Install Lantern for Google Services" \
   TRUE "Install SSR" "" \
-  TRUE "Install Sogou Pinyin" "Sogou Pinyin for chinese input"
+  TRUE "Install Sogou Pinyin" "Sogou Pinyin for chinese input" \
   TRUE "Install Chrome" "Install Google Chrome for better Web surf experience" \
   TRUE "Install NetEase Music" "Install Netease Music" \
   TRUE "Install VScode" "Modern and fash Code Editor" \
