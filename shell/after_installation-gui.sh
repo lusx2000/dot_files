@@ -9,6 +9,7 @@ clear
 VIMRC_DIR=`pwd`
 cd
 HOME_DIR=`pwd`
+DOWNLOAD_DIR=$HOME_DIR"/Downloads/"
 IDE_INSTALL_DIR=$HOME_DIR"/.jetbrains/"
 
 # Create GUI
@@ -18,18 +19,21 @@ GUI=$(zenity --list --checklist \
   --title="Ubuntu Configure Tool" \
   --text="Choose items to get installed" \
   --column="Choice" --column="Operation"	--column="Description" \
-  TRUE "Change Mirror" "Change to USTC mirror for better internet connection speed" \
+  FALSE "Change Mirror" "Change to USTC mirror for better internet connection speed" \
   TRUE "Update" "Update and Upgrade" \
-  FALSE "Install Build Essential" "Install Git CMake etc" \
-  FALSE "Install zsh" "Replace bash by zsh and on-my-zsh" \
-  FALSE "Install Lantern" "Install Lantern for Google Services" \
-  FALSE "Install Chrome" "Install Google Chrome for better Web surf experience" \
-  FALSE "Install NetEase Music" "Install Netease Music" \
-  FALSE "Install CLion" "Install C/C++ IDE " \
-  FALSE "Install Pycharm" "Install Python IDE" \
+  TRUE "Install Build Essential" "Install Git CMake etc" \
+  TRUE "Install zsh" "Replace bash by zsh and on-my-zsh" \
+  TRUE "Install Lantern" "Install Lantern for Google Services" \
+  TRUE "Install SSR" "" \
+  TRUE "Install Sogou Pinyin" "Sogou Pinyin for chinese input"
+  TRUE "Install Chrome" "Install Google Chrome for better Web surf experience" \
+  TRUE "Install NetEase Music" "Install Netease Music" \
+  TRUE "Install VScode" "Modern and fash Code Editor" \
+  TRUE "Install CLion" "Install C/C++ IDE " \
+  TRUE "Install Pycharm" "Install Python IDE" \
   FALSE "Install Android Studio" "Install Android Development IDE" \
   FALSE "Install OpenCV 3" "Auto Complie OpenCV3.2 and all additional package" \
-  FALSE "Create .vimrc" "Update .vimrc for better code experience" \
+  TRUE "Create .vimrc" "Update .vimrc for better code experience" \
   --separator="|");
 
 if [[ $GUI ]]
@@ -80,22 +84,48 @@ then
     clear
   	echo "Installing Lantern"
   	echo ""
-	  cd ~/Downloads
-  	wget https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb
+	  cd $DOWNLOAD_DIR
+  	wget -c https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb
     sudo dpkg -i lantern-installer-64-bit.deb
     sudo apt-get -y install -f
     rm -f lantern-installer-64-bit.deb
   fi
   
+  # Install SSR
+  if [[ $GUI == *"Install SSR"* ]]
+  then
+   clear
+   echo "Installing Electron-SSR"
+   echo ""
+   cd $DOWNLOAD_DIR
+   wget -c https://github.com/erguotou520/electron-ssr/releases/download/v0.2.2/electron-ssr_0.2.2_amd64.deb
+   sudo dpkg -i electron-ssr_0.2.2_amd64.deb
+   sudo apt-get -y install -f
+   rm -f electron-ssr_0.2.2_amd64.deb
+  fi
+
+  # Install Sogou Pinyin
+  if [[ $GUI == *"Install Sogou Pinyin"* ]]
+  then
+   clear
+   echo "Installing Sogou Pinyin"
+   echo ""
+   cd $DOWNLOAD_DIR
+   wget -c http://cdn2.ime.sogou.com/dl/index/1509619794/sogoupinyin_2.2.0.0102_amd64.deb
+   sudo dpkg -i sogoupinyin_2.2.0.0102_amd64.deb
+   sudo apt-get -y install -f
+   rm -f sogoupinyin_2.2.0.0102_amd64.deb
+  fi
+
   # Install Google Chrome
   if [[ $GUI == *"Install Chrome"* ]]
   then
     clear
   	echo "Installing Chrome"
   	echo ""
-  	cd ~/Downloads
+  	cd $DOWNLOAD_DIR
     sudo apt-get -y install flashplugin-installer
-	  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	  wget -c https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt-get -y install -f
     rm -f google-chrome-stable_current_amd64.deb
@@ -107,11 +137,24 @@ then
     clear
   	echo "Installing NetEase Music"
   	echo ""
-	  cd ~/Downloads
-  	wget http://s1.music.126.net/download/pc/netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
+	  cd $DOWNLOAD_DIR
+  	wget -c http://s1.music.126.net/download/pc/netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
     sudo dpkg -i netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
     sudo apt-get -y install -f
     rm -f netease-cloud-music_1.0.0_amd64_ubuntu16.04.deb
+  fi
+
+  # Install VScode
+  if [[ $GUI == *"Install VScode"* ]]
+  then
+   clear
+   echo "Installing VScode"
+   echo ""
+   cd $DOWNLOAD_DIR
+   wget -c https://go.microsoft.com/fwlink/?LinkID=760868 -O vscode.deb
+   sudo dpkg -i vscode.deb
+   sudo apt-get -y install -f
+   rm -f vscode.deb
   fi
 
   # Install CLion
@@ -122,7 +165,7 @@ then
   	echo ""
     mkdir ~/.jetbrains
 	  cd ~/Downloads
-  	wget https://download.jetbrains.com/cpp/CLion-2017.3.4.tar.gz
+  	wget https://download.jetbrains.com/cpp/CLion-2018.1.tar.gz
     tar zvxf ~/Downloads/CLion-2017.3.4.tar.gz -C $IDE_INSTALL_DIR
   fi
 
@@ -134,7 +177,7 @@ then
   	echo ""
 	  mkdir ~/.jetbrains
     cd ~/Downloads
-  	wget https://download.jetbrains.com/python/pycharm-professional-2017.3.3.tar.gz
+  	wget https://download.jetbrains.com/python/pycharm-professional-2018.1.tar.gz
     tar zvxf ~/Downloads/pycharm-professional-2017.3.3.tar.gz -C $IDE_INSTALL_DIR
   fi
   
@@ -178,9 +221,8 @@ _ANDROID_EOF
   	echo ""
     mkdir ~/Documents/OpenCV
     cd ~/Documents/OpenCV
-    sudo apt-get -y install aria2
-    aria2c https://github.com/opencv/opencv/archive/3.2.0.tar.gz -o opencv3.2.0.tar.gz
-    aria2c https://github.com/opencv/opencv_contrib/archive/3.2.0.tar.gz -o opencv3.2.0-contrib.tar.gz
+    wget -c https://github.com/opencv/opencv/archive/3.2.0.tar.gz -O opencv3.2.0.tar.gz
+    wget -c https://github.com/opencv/opencv_contrib/archive/3.2.0.tar.gz -O opencv3.2.0-contrib.tar.gz
     tar zvxf ~/Documents/OpenCV/opencv3.2.0.tar.gz
     tar zvxf ~/Documents/OpenCV/opencv3.2.0-contrib.tar.gz
     echo "Downloaded successfully"
@@ -203,9 +245,6 @@ _ANDROID_EOF
   if [[ $GUI == *"Create .vimrc"* ]]
   then
     clear
-  	echo "Updating"
-    sudo apt-get update
-    sudo apt-get install git
     cp $VIMRC_DIR/vimrc ~/.vimrc
   fi
 
